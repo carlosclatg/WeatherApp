@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const logic = {
     url : `https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/${process.env.REACT_APP_APIKEY}`,
-    //url : `https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/bddb1cfc4c7ab8e6325bf52933990568`,
+
     /**
      * Logs in the user by its credentials.
      * 
