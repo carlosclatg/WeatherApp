@@ -1,30 +1,38 @@
-.bodycontainer
-    display: flex
-    flex-direction: row
-    width: 100vw
+@import '../../index.sass'
     
-.coverright
-    margin-top: 0%
-
 .sidenav
     text-align: right
     height: 70px
-    line-height: 70px
-    z-index: 1000000000
+    line-height: 50px
+    z-index: 10
     display: flex
+    position: fixed
+    top: 0
+    width: 100%
+    background-color: $color1
+
 
     &__menu
-    margin-left: 30px
+        margin-left: 30px
+        background-color: $color1
+        display: flex
+        flex-direction: row
+        div
+            color: $color4
+            margin: 0
+            vertical-align: middle
+            display: flex
+            justify-content: center
+            align-items: center
+            p
+                margin: 0
     a
         clear: right
         text-decoration: none
-        color: gray
+        color: $color4
         margin: 0 10px
         line-height: 70px
-        span
-            color: #df4d19 
-        .fa-sign-out-alt
-            color: #df4d19
+
     label
         margin: 0 40px 0 0
         font-size: 26px

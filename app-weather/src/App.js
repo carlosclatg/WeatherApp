@@ -5,6 +5,7 @@ import DataDisplay from './components/DataDisplay';
 import options from './config/options'
 import error from './config/error'
 import Feedback from './components/Feedback';
+import SideBar from './components/SideBar';
 
 
 // TODO if attribute contains time --> 
@@ -70,7 +71,6 @@ class App extends Component {
     }
     
     this.setState({dropDownItems: dropDownList}, () => this.representData())
-    this.setState({currentVisible: "time"}, ()=> {})
   }
 
 
@@ -157,34 +157,33 @@ class App extends Component {
     const {simpleDescription, dataToDisplay, dropDownItems, feedback, currentWeather, latitude, longitude} = this.state;
     return (
       <Fragment>
+        <SideBar latitude={latitude} longitude={longitude}/>
         <div>
-          <h2>Meteo Weather app</h2>
-          <p>Your position is {latitude} , {longitude} </p>
-        </div>
-        { !currentWeather ?
-          <button onClick={this.getHourlyWeather} className="myButton">Get weather!</button>
-          :
-          null
-        }
-        
-        {feedback && <Feedback message={feedback} />}
-        <p ref={this.myRef}>The forecast for today is : {simpleDescription}</p>
-        <div>
-          <Switch toggleHourlyDaily={this.toggleHourlyDaily}/>
-        </div>
-        <form>
-          { dropDownItems ?
-            <select onChange={this.handleChange}>
-              {dropDownItems.map((option) => <option  key={option} value={option}>{option}</option>)}
-            </select> : 
+          { !currentWeather ?
+            <button onClick={this.getHourlyWeather} className="myButton">Get weather!</button>
+            :
             null
-          }  
-        </form>
-        { dataToDisplay ?
-            <DataDisplay dataToDisplay={dataToDisplay} />
-            : 
-            <div></div> 
-        }
+          }
+          
+          {feedback && <Feedback message={feedback} />}
+          <p ref={this.myRef}>The forecast for today is : {simpleDescription}</p>
+          <div>
+            <Switch toggleHourlyDaily={this.toggleHourlyDaily}/>
+          </div>
+          <form>
+            { dropDownItems ?
+              <select onChange={this.handleChange}>
+                {dropDownItems.map((option) => <option  key={option} value={option}>{option}</option>)}
+              </select> : 
+              null
+            }  
+          </form>
+          { dataToDisplay ?
+              <DataDisplay dataToDisplay={dataToDisplay} />
+              : 
+              <div></div> 
+          }
+        </div>
       </Fragment>
     );
   }
