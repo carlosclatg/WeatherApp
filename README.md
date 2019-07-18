@@ -11,9 +11,17 @@ Data can be viewed in hourly mode (48h scope) or daily mode (7d scope)
 Enjoy!
 
 
+## Technologies used
+
+React, JS, html, sass
+
+
+
+
 Future improvements:
 
 - Styling improvements
 - Switch from grapfical to table data
 - Migrate to hooks main components
+- React Routing for a more confortable navigation and splitting into several routes
 
