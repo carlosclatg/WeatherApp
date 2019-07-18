@@ -1,4 +1,4 @@
-import React, {Component, Fragment, useState} from 'react'
+import React, {Fragment, useState} from 'react'
 import './index.sass'
 
 export default function SideBar (props) {

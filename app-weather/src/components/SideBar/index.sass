@@ -26,12 +26,14 @@
             align-items: center
             p
                 margin: 0
+                font-size: 1.5vw
     a
         clear: right
         text-decoration: none
-        color: $color4
+        color: $color3
         margin: 0 10px
         line-height: 70px
+        font-size: 2.3vw
 
     label
         margin: 0 40px 0 0
@@ -56,12 +58,23 @@
             text-align: center
             width: 100%
             display: none
-            background-color: #dfe2e2
+            background-color: $color1
+            div
+                p
+                    font-size: 3vw
+                    white-space: nowrap
+                    overflow: hidden
+                    display: inline-block
+                    text-overflow: ellipsis
+                    border: 1px solid #ddd
+                    margin: 0
         a
             display: block
-            border-bottom: 1px solid #EAEAEB
-            background-color: #dfe2e2
+            background-color: $color1
+            font-size: 6vw
             margin: 0
-            color: black
         #toggle:checked + .sidenav__menu
-            display: block
+            display: flex
+            flex-direction: row
+            justify-content: flex-start
+            align-content: center

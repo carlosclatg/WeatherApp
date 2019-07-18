@@ -23,6 +23,7 @@ class App extends Component {
 
     
   componentDidMount = () =>{
+    this.getHourlyWeather()
     if(navigator.geolocation){
       navigator.geolocation.watchPosition((pos) => {
         this.setState({latitude: pos.coords.latitude})
@@ -39,6 +40,7 @@ class App extends Component {
     if(!this.state.currentWeather){
       let currentWeather = await logic.getHourlyWeather(this.state.latitude, this.state.longitude)
       if (currentWeather == null ) this.setState({feedback : "API failure" }) 
+      console.log(currentWeather)
       this.setState({currentWeather}, ()=> {})
       this.forceUpdate()
     } 
