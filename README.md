@@ -25,3 +25,8 @@ Future improvements:
 - Migrate to hooks main components
 - React Routing for a more confortable navigation and splitting into several routes
 
+
+
+## Sample image
+
+![alt text](./app-weather/public/resource/Captura.png?raw=true "screen")
