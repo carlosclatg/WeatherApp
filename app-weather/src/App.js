@@ -160,9 +160,7 @@ class App extends Component {
     const {simpleDescription, dataToDisplay, dropDownItems, feedback, currentWeather, latitude, longitude} = this.state;
     return (
       <Fragment>
-        <video>
-          <source src="https://www.pexels.com/video/low-clouds-over-mountains-2314125/" type="video/mp4" />
-        </video>
+        
         <NewSideBar latitude={latitude} longitude={longitude}/>
         <div>
           { !currentWeather ?
@@ -196,3 +194,12 @@ class App extends Component {
 }
 
 export default App;
+
+
+/*
+
+<video>
+          <source src="https://www.pexels.com/video/low-clouds-over-mountains-2314125/" type="video/mp4" />
+        </video>
+
+      */

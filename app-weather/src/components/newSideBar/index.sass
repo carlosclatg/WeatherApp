@@ -8,7 +8,7 @@
     flex-direction: row
     align-items: center
     backface-visibility: hidden
-    background-color: black
+    background-color: $color1
     width: 100%
     height: $headerheight
 
@@ -23,15 +23,23 @@
         
         
 
+    .heading
+        &-title
+            animation-name: moveInLeft
+            animation-duration: 4s
+            animation-timing-function: ease-out
+            margin-left: 20px
+            /*animation-delay: 1s*/
+        &-gpsposition
+            animation: moveInRight 3s ease-out
 
-    .heading-title
-        animation-name: moveInLeft
-        animation-duration: 4s
-        animation-timing-function: ease-out
-        /*animation-delay: 1s*/
+        &-containergpsposition
+            width: 100%
+            display: flex
+            justify-content: flex-end
+            justify-content: flex-end
+            justify-content: flex-end
 
-    .heading-gpsposition
-        animation: moveInRight 3s ease-out
 
 
 @keyframes moveInLeft

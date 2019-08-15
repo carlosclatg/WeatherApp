@@ -13,7 +13,9 @@ export default function NewSideBar (props) {
                     <img src="./resource/logo.png" alt="logo" className="logo"/>
                 </div>
                 <span className="heading-title">MeteoApp</span>
-                <span className="heading-gpsposition">({latitude}, {longitude})</span>
+                <div className="heading-containergpsposition">
+                    <span className="heading-gpsposition">({latitude}, {longitude})</span>
+                </div>
             </header>
         </Fragment>
     );
