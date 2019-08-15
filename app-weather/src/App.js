@@ -6,6 +6,7 @@ import options from './config/options'
 import error from './config/error'
 import Feedback from './components/Feedback';
 import SideBar from './components/SideBar';
+import NewSideBar from './components/newSideBar';
 
 
 // TODO if attribute contains time --> 
@@ -159,7 +160,10 @@ class App extends Component {
     const {simpleDescription, dataToDisplay, dropDownItems, feedback, currentWeather, latitude, longitude} = this.state;
     return (
       <Fragment>
-        <SideBar latitude={latitude} longitude={longitude}/>
+        <video>
+          <source src="https://www.pexels.com/video/low-clouds-over-mountains-2314125/" type="video/mp4" />
+        </video>
+        <NewSideBar latitude={latitude} longitude={longitude}/>
         <div>
           { !currentWeather ?
             <button onClick={this.getHourlyWeather} className="myButton">Get weather!</button>
@@ -168,7 +172,7 @@ class App extends Component {
           }
           
           {feedback && <Feedback message={feedback} />}
-          <p ref={this.myRef}>The forecast for today is : {simpleDescription}</p>
+          <p className="textForecast" ref={this.myRef}>The forecast for today is : {simpleDescription}</p>
           <div>
             <Switch toggleHourlyDaily={this.toggleHourlyDaily}/>
           </div>

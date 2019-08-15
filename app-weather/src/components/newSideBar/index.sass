@@ -1,0 +1,61 @@
+@import '../../index.sass'
+
+.header
+    position: absolute
+    top: 0px
+    left: 0px
+    display: flex
+    flex-direction: row
+    align-items: center
+    backface-visibility: hidden
+    background-color: black
+    width: 100%
+    height: $headerheight
+
+    .logo-box
+        position: relative
+        top: 0px
+        left: 0px
+
+    .logo
+        height: $imagedim
+        width: $imagedim
+        
+        
+
+
+    .heading-title
+        animation-name: moveInLeft
+        animation-duration: 4s
+        animation-timing-function: ease-out
+        /*animation-delay: 1s*/
+
+    .heading-gpsposition
+        animation: moveInRight 3s ease-out
+
+
+@keyframes moveInLeft
+    0%
+        opacity: 0
+        transform: translateX(-100px)
+
+    50%
+        opacity: 0.5
+        translateX(30px)
+
+    100%
+        opacity: 1
+        transform: translate(0)
+    
+@keyframes moveInRight
+    0%
+        opacity: 0
+        transform: translateX(100px)
+
+    50%
+        opacity: 0.5
+        translateX(-30px)
+
+    100%
+        opacity: 1
+        transform: translate(0)
