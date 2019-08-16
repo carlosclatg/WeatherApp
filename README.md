@@ -29,4 +29,4 @@ Future improvements:
 
 ## Sample image
 (commit  df68755b97335e452ee09315a6edb6dbaef635ac)
-![alt text](./app-weather/public/resource/Captura.png?raw=true "screen")
+![alt text](./app-weather/public/resource/Captura.PNG?raw=true "screen")
