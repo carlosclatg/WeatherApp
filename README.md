@@ -24,6 +24,9 @@ Future improvements:
 - Switch from grapfical to table data
 - Migrate to hooks main components
 - React Routing for a more confortable navigation and splitting into several routes
+- Create a new component that integrates switch for a better performance when switching and selecting display
+- Create tow routes one for each display, for a easiest comprehension.
+
 
 
 

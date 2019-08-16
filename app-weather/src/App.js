@@ -14,13 +14,15 @@ import NewSideBar from './components/newSideBar';
 class App extends Component {
 
   state = {currentWeather: null, 
-    currentVisible: null, 
+    currentVisible: "time", 
     dataToDisplay: null, 
-    hourlyDisplay: false,
+    hourlyDisplay: null,
     latitude: 41.3851,
     longitude: 2.1734,
     feedback: null,
-    dropDownItems: []};
+    dropDownListHourly: [],
+    dropDownListDaily:[]
+  };
 
     
   componentDidMount = () =>{
@@ -41,7 +43,6 @@ class App extends Component {
     if(!this.state.currentWeather){
       let currentWeather = await logic.getHourlyWeather(this.state.latitude, this.state.longitude)
       if (currentWeather == null ) this.setState({feedback : "API failure" }) 
-      console.log(currentWeather)
       this.setState({currentWeather}, ()=> {})
       this.forceUpdate()
     } 
@@ -56,37 +57,39 @@ class App extends Component {
     const {currentWeather, hourlyDisplay} = this.state
     this.setState({hourlyDisplay : checked}, ()=> {})
     
-    
-    let dropDownList = []
-    if(!hourlyDisplay){
-      for(let elem in currentWeather.hourly.data[0]){
-        if(typeof currentWeather.hourly.data[0][elem] == "number"){ //only number representing data
-          dropDownList.push(elem);
+
+    let dropDownListHourly = []
+    let dropDownListDaily = []
+    if(dropDownListHourly.length==0 && dropDownListDaily.length==0){
+      if(!hourlyDisplay){
+        for(let elem in currentWeather.hourly.data[0]){
+          if(typeof currentWeather.hourly.data[0][elem] == "number"){ //only number representing data
+            dropDownListDaily.push(elem);
+          }
+          
         }
-        
-      }
-    } else {
-      for(let elem in currentWeather.daily.data[0]){
-        if(typeof currentWeather.daily.data[0][elem] == "number"){ //only number representing data
-          dropDownList.push(elem);
+        this.setState({dropDownListDaily})
+      } else {
+        for(let elem in currentWeather.daily.data[0]){
+          if(typeof currentWeather.daily.data[0][elem] == "number"){ //only number representing data
+            dropDownListHourly.push(elem);
+          }
         }
+        this.setState({dropDownListHourly})
       }
     }
-    
-    this.setState({dropDownItems: dropDownList}, () => this.representData())
   }
 
 
   handleChange = async (e) => {
     let currentVisible
     if(e.target.value) currentVisible = e.target.value
-
     await this.setState({currentVisible})
-    this.representData()
   }
 
 
-  representData = () => {
+  representData = (event) => {
+    if(event) event.preventDefault()
     if(!this.state.currentWeather) return
     if(!this.state.currentVisible) return
     this.setState({feedback: null})
@@ -157,7 +160,8 @@ class App extends Component {
 
 
   render = () => {
-    const {simpleDescription, dataToDisplay, dropDownItems, feedback, currentWeather, latitude, longitude} = this.state;
+    const {simpleDescription, dataToDisplay, hourlyDisplay,  dropDownListHourly, dropDownListDaily, feedback, currentWeather, latitude, longitude} = this.state;
+    let dropDown = hourlyDisplay ? dropDownListDaily : dropDownListHourly;
     return (
       <Fragment>
         
@@ -174,14 +178,19 @@ class App extends Component {
           <div>
             <Switch toggleHourlyDaily={this.toggleHourlyDaily}/>
           </div>
-          <form>
-            { dropDownItems ?
-              <select onChange={this.handleChange}>
-                {dropDownItems.map((option) => <option  key={option} value={option}>{option}</option>)}
-              </select> : 
+          <form className="dropDown">
+            { dropDown ?
+              <Fragment>
+                <select className="dropDown-select" onChange={this.handleChange}>
+                  {dropDown.map((option) => <option  key={option} value={option}>{option}</option>)}
+                </select>
+                <button className="dropDown-button" onClick={(event) => this.representData(event)}>Represent Data</button>
+              </Fragment>
+              : 
               null
             }  
           </form>
+          
           { dataToDisplay ?
               <DataDisplay dataToDisplay={dataToDisplay} />
               : 
