@@ -73,7 +73,6 @@ class Layout extends Component {
             }
           }
         }
-        console.log()
         var randomNumber = Math.random()
           //Random number for intensity of color.  
         const dataToDisplay = {
@@ -109,9 +108,7 @@ class Layout extends Component {
             }
             
             <p className="textForecast" ref={this.myRef}>The forecast for today is : {simpleDescription}</p>
-            <div>
-                <Switch toggleHourlyDaily={this.toggleHourlyDaily}/>
-            </div>
+
             <form className="dropDown">
                 { dropDown ?
                 <Fragment>
@@ -136,3 +133,9 @@ class Layout extends Component {
     }
 }
 export default withRouter(Layout);
+
+
+/*
+            <div>
+                <Switch toggleHourlyDaily={this.toggleHourlyDaily}/>
+            </div>*/

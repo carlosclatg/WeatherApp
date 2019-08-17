@@ -4,6 +4,8 @@ import logic from './logic';
 import options from './config/options'
 import error from './config/error'
 import Layout from './components/Layout'
+import sampleData from './sampledata'
+import NewSideBar from './components/newSideBar';
 
 
 // TODO if attribute contains time --> 
@@ -36,13 +38,12 @@ class App extends Component {
     if(currentWeather == null){
       let currentWeather = await logic.getHourlyWeather(latitude, longitude)
       console.log(currentWeather)
-      if (currentWeather == null ) this.setState({feedback : "API failure" }) 
+      if (currentWeather == null ) this.setState({currentWeather : sampleData }) 
       this.setState({currentWeather}, ()=> {})
-      if(!currentWeather) {
+      /*if(!currentWeather) {
         alert("You have not obtained data! Please obtain data with the button")
         return 
-      }
-      console.log(currentWeather)
+      }*/
       let dropDownListHourly = []
       let dropDownListDaily = []
       if(dropDownListHourly.length===0 && dropDownListDaily.length===0){
@@ -54,6 +55,7 @@ class App extends Component {
             
           }
           this.setState({dropDownListDaily})
+          console.log("dropDownListDaily")
           console.log(dropDownListDaily)
 
           for(let elem in currentWeather.daily.data[0]){
@@ -62,6 +64,7 @@ class App extends Component {
             }
           }
           this.setState({dropDownListHourly})
+          console.log("dropDownListHourly")
           console.log(dropDownListHourly)
 
       }
@@ -79,15 +82,19 @@ class App extends Component {
     
     return (
       currentWeather ?
+      
       <Switch>
       <Fragment>
         <Route path="/" render={() => hourlyDisplay ? <Redirect to="/hourly" /> : <Redirect to="/daily" />}/>
-        <Route exact path="/hourly" render = {() => <Layout  hourlyDisplay={false} dropDown={dropDownListHourly} currentWeather={currentWeather} latitude = {latitude} longitude={longitude} handleChange={this.handleChange}/> }/>
-        <Route exact path="/daily" render = {() => <Layout hourlyDisplay={true} dropDown={dropDownListDaily} currentWeather={currentWeather } latitude = {latitude} longitude={longitude} handleChange={this.handleChange}/>}/>
+        <Route exact path="/daily" render = {() => <Layout  hourlyDisplay={false} dropDown={dropDownListHourly} currentWeather={currentWeather} latitude = {latitude} longitude={longitude} handleChange={this.handleChange}/> }/>
+        <Route exact path="/hourly" render = {() => <Layout hourlyDisplay={true} dropDown={dropDownListDaily} currentWeather={currentWeather} latitude = {latitude} longitude={longitude} handleChange={this.handleChange}/>}/>
       </Fragment>
       </Switch>
       :
-      <button onClick={(event)=> this.getHourlyWeather(event) }>Click to get Data</button>
+      <Fragment>
+        <NewSideBar></NewSideBar>
+        <button onClick={(event)=> this.getHourlyWeather(event) }>Click to get Data</button>
+      </Fragment>
     );
   }
 }
