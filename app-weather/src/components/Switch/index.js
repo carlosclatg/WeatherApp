@@ -12,7 +12,7 @@ class Switch extends Component {
     render() {
         return (
             <Fragment>
-                {this.state.checked ? <p className="switchDaily">Daily</p> : <p className="switchDaily">Hourly</p>}
+                {this.state.checked ? <p className="switchDaily">Hourly</p> : <p className="switchDaily">Daily</p>}
                     <label className="switch">
                         <input type="checkbox" onClick = {this.toggle}/>
                         <span className="slider round"/>

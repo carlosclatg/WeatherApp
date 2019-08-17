@@ -1,12 +1,9 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component, Fragment,} from 'react';
+import { Route, Redirect, withRouter, Switch  } from "react-router-dom";
 import logic from './logic';
-import Switch from './components/Switch';
-import DataDisplay from './components/DataDisplay';
 import options from './config/options'
 import error from './config/error'
-import Feedback from './components/Feedback';
-import SideBar from './components/SideBar';
-import NewSideBar from './components/newSideBar';
+import Layout from './components/Layout'
 
 
 // TODO if attribute contains time --> 
@@ -25,184 +22,77 @@ class App extends Component {
   };
 
     
-  componentDidMount = () =>{
-    this.getHourlyWeather()
+
+
+  getHourlyWeather = async (event) => {
+    event.preventDefault()
+    const {currentWeather, hourlyDisplay, latitude, longitude} = this.state
     if(navigator.geolocation){
       navigator.geolocation.watchPosition((pos) => {
         this.setState({latitude: pos.coords.latitude})
         this.setState({longitude: pos.coords.longitude})
-        this.getHourlyWeather()
-        let currentVisible = "time"
-        this.setState({currentVisible}, ()=> {})
-        this.toggleHourlyDaily(true)
       }, error, options);
     }
-  }
-
-  getHourlyWeather = async () => {
-    if(!this.state.currentWeather){
-      let currentWeather = await logic.getHourlyWeather(this.state.latitude, this.state.longitude)
+    if(currentWeather == null){
+      let currentWeather = await logic.getHourlyWeather(latitude, longitude)
+      console.log(currentWeather)
       if (currentWeather == null ) this.setState({feedback : "API failure" }) 
       this.setState({currentWeather}, ()=> {})
-      this.forceUpdate()
+      if(!currentWeather) {
+        alert("You have not obtained data! Please obtain data with the button")
+        return 
+      }
+      console.log(currentWeather)
+      let dropDownListHourly = []
+      let dropDownListDaily = []
+      if(dropDownListHourly.length===0 && dropDownListDaily.length===0){
+        
+          for(let elem in currentWeather.hourly.data[0]){
+            if(typeof currentWeather.hourly.data[0][elem] == "number"){ //only number representing data
+              dropDownListDaily.push(elem);
+            }
+            
+          }
+          this.setState({dropDownListDaily})
+          console.log(dropDownListDaily)
+
+          for(let elem in currentWeather.daily.data[0]){
+            if(typeof currentWeather.daily.data[0][elem] == "number"){ //only number representing data
+              dropDownListHourly.push(elem);
+            }
+          }
+          this.setState({dropDownListHourly})
+          console.log(dropDownListHourly)
+
+      }
     } 
   }
 
-  toggleHourlyDaily = (checked) => {
-    
-    if(!this.state.currentWeather) {
-      alert("You have not obtained data! Please obtain data with the button")
-      return 
-    }
-    const {currentWeather, hourlyDisplay} = this.state
-    this.setState({hourlyDisplay : checked}, ()=> {})
-    
 
-    let dropDownListHourly = []
-    let dropDownListDaily = []
-    if(dropDownListHourly.length==0 && dropDownListDaily.length==0){
-      if(!hourlyDisplay){
-        for(let elem in currentWeather.hourly.data[0]){
-          if(typeof currentWeather.hourly.data[0][elem] == "number"){ //only number representing data
-            dropDownListDaily.push(elem);
-          }
-          
-        }
-        this.setState({dropDownListDaily})
-      } else {
-        for(let elem in currentWeather.daily.data[0]){
-          if(typeof currentWeather.daily.data[0][elem] == "number"){ //only number representing data
-            dropDownListHourly.push(elem);
-          }
-        }
-        this.setState({dropDownListHourly})
-      }
-    }
+
+  handleChange = (hourlyDisplay) => {
+    this.setState({hourlyDisplay}, () => {})
   }
-
-
-  handleChange = async (e) => {
-    let currentVisible
-    if(e.target.value) currentVisible = e.target.value
-    await this.setState({currentVisible})
-  }
-
-
-  representData = (event) => {
-    if(event) event.preventDefault()
-    if(!this.state.currentWeather) return
-    if(!this.state.currentVisible) return
-    this.setState({feedback: null})
-    const {currentWeather, hourlyDisplay, currentVisible} = this.state
-    let dataDisplay = [];
-    let timeToDisplay = [];
-    const AAxisLength = hourlyDisplay ? currentWeather.hourly.data.length : currentWeather.daily.data.length
-    let units = hourlyDisplay ? 'h' : null
-    var currentHour = new Date().getHours()
-    for(let i = 0; i < AAxisLength; i++){
-      //Case hourly
-      if(hourlyDisplay){
-        let stringXAxis
-        if(currentHour + i > 23){
-          if(currentHour + i > 47){
-            stringXAxis = (currentHour + i -48).toString() + units 
-          } else {
-            stringXAxis = (currentHour + i -24).toString() + units 
-          }
-          
-        } else {
-          stringXAxis = currentHour + i + units 
-        }
-        timeToDisplay.push(stringXAxis)
-      } else {//Case daily
-        let stringXAxis = new Date(currentWeather.daily.data[i].time * 1000)
-        timeToDisplay.push(stringXAxis.toLocaleDateString())
-      }
-    }
-
-    if(hourlyDisplay){
-      for(let i = 0; i < currentWeather.hourly.data.length ; i++){
-        if(currentVisible.includes("time") || currentVisible.includes("Time")){
-          dataDisplay.push(new Date(currentWeather.hourly.data[i][currentVisible]*1000).getHours())
-        } else {
-          dataDisplay.push(currentWeather.hourly.data[i][currentVisible])
-        }
-          
-      }
-    } else {
-      for(let i = 0; i < currentWeather.daily.data.length ; i++){
-        if(currentVisible.includes("time") || currentVisible.includes("Time")){
-          dataDisplay.push(new Date(currentWeather.daily.data[i][currentVisible]*1000).getHours())
-        } else {
-          dataDisplay.push(currentWeather.daily.data[i][currentVisible])
-        }
-      }
-    }
-    var randomNumber = Math.random()
-      //Random number for intensity of color.  
-    const dataToDisplay = {
-      labels: timeToDisplay,
-      datasets: [
-        {
-          label: currentVisible,
-          backgroundColor: `rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255},${randomNumber})`,
-          borderColor: `rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255},1)`,
-          borderWidth: 2,
-          hoverBackgroundColor: `rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255},0.4)`,
-          hoverBorderColor: `rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255},1)`,
-          data: dataDisplay
-        }
-      ]
-    }
-    this.setState({simpleDescription: currentWeather.hourly.summary})
-    this.setState({dataToDisplay}, ()=> {})
-  }
-
 
   render = () => {
-    const {simpleDescription, dataToDisplay, hourlyDisplay,  dropDownListHourly, dropDownListDaily, feedback, currentWeather, latitude, longitude} = this.state;
-    let dropDown = hourlyDisplay ? dropDownListDaily : dropDownListHourly;
+    const {hourlyDisplay,  dropDownListHourly, dropDownListDaily, currentWeather, latitude, longitude} = this.state;
+    
     return (
+      currentWeather ?
+      <Switch>
       <Fragment>
-        
-        <NewSideBar latitude={latitude} longitude={longitude}/>
-        <div>
-          { !currentWeather ?
-            <button onClick={this.getHourlyWeather} className="myButton">Get weather!</button>
-            :
-            null
-          }
-          
-          {feedback && <Feedback message={feedback} />}
-          <p className="textForecast" ref={this.myRef}>The forecast for today is : {simpleDescription}</p>
-          <div>
-            <Switch toggleHourlyDaily={this.toggleHourlyDaily}/>
-          </div>
-          <form className="dropDown">
-            { dropDown ?
-              <Fragment>
-                <select className="dropDown-select" onChange={this.handleChange}>
-                  {dropDown.map((option) => <option  key={option} value={option}>{option}</option>)}
-                </select>
-                <button className="dropDown-button" onClick={(event) => this.representData(event)}>Represent Data</button>
-              </Fragment>
-              : 
-              null
-            }  
-          </form>
-          
-          { dataToDisplay ?
-              <DataDisplay dataToDisplay={dataToDisplay} />
-              : 
-              <div></div> 
-          }
-        </div>
+        <Route path="/" render={() => hourlyDisplay ? <Redirect to="/hourly" /> : <Redirect to="/daily" />}/>
+        <Route exact path="/hourly" render = {() => <Layout  hourlyDisplay={false} dropDown={dropDownListHourly} currentWeather={currentWeather} latitude = {latitude} longitude={longitude} handleChange={this.handleChange}/> }/>
+        <Route exact path="/daily" render = {() => <Layout hourlyDisplay={true} dropDown={dropDownListDaily} currentWeather={currentWeather } latitude = {latitude} longitude={longitude} handleChange={this.handleChange}/>}/>
       </Fragment>
+      </Switch>
+      :
+      <button onClick={(event)=> this.getHourlyWeather(event) }>Click to get Data</button>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
 
 
 /*
